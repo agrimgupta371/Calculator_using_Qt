@@ -35,22 +35,44 @@ Calculator::~Calculator()
 {
     delete ui;
 }
+/*
+void decimal_to_binary(int n){
+    QString bin = "";
+    if(n == 0){
+        bin + "0";
+        //printf("0");
+        return;
+    }
+    else if(n == 1){
+        bin + "1";
+        //printf("1");
+        return;
+    }
+    else{
+        decimal_to_binary(n/2);
+        printf("%d", n%2);
+    }
+}*/
 
 void Calculator::NumPressed(){
     QPushButton *button = (QPushButton *)sender();
     QString butVal = button->text();
     QString displayVal = ui->Display->text();
+    QString display2Val = ui->Display2->text();
     if(!displayVal.contains('.') && (displayVal.toDouble() == 0)){
         ui->Display->setText(butVal);
+        ui->Display2->setText(display2Val + butVal);
     }
     else if(displayVal.contains('.') && butVal == "0"){
         QString newVal = displayVal + butVal;
         ui->Display->setText(newVal);
+        ui->Display2->setText(display2Val + butVal);
     }
     else{
         QString newVal = displayVal + butVal;
         double dblNewVal = newVal.toDouble();
         ui->Display->setText(QString::number(dblNewVal, 'g', 16));
+        ui->Display2->setText(display2Val + butVal);
     }
 }
 
@@ -64,6 +86,7 @@ void Calculator::MathButtonPressed(){
     calcVal = displayVal.toDouble();
     QPushButton *button = (QPushButton *)sender();
     QString butVal = button->text();
+    ui->Display2->setText(displayVal + butVal);
     if(QString::compare(butVal, "/", Qt::CaseInsensitive) == 0){
         divTrigger = true;
     }
@@ -112,6 +135,7 @@ void Calculator::ChangeNumberSign(){
 void Calculator::on_Dot_released(){
     if(!ui->Display->text().contains('.')){
         ui->Display->setText(ui->Display->text() + ".");
+        ui->Display2->setText(ui->Display2->text() + ".");
     }
 }
 
@@ -132,6 +156,13 @@ void Calculator::on_Square_released(){
     ui->Display->setText(QString::number(dblDisplayValSign, 'g', 16));
 }
 
+void Calculator::on_Cube_released(){
+    QString displayVal = ui->Display->text();
+
+    double dblDisplayVal = displayVal.toDouble();
+    double dblDisplayValSign = dblDisplayVal * dblDisplayVal*dblDisplayVal;
+    ui->Display->setText(QString::number(dblDisplayValSign, 'g', 16));
+}
 
 void Calculator::on_Clear_released(){
     divTrigger = false;
@@ -140,5 +171,18 @@ void Calculator::on_Clear_released(){
     subTrigger = false;
 
     ui->Display->setText(QString::number(0.0));
+    ui->Display2->setText("");
+}
+
+
+
+void Calculator::on_Back_released()
+{
+    QString displayVal = ui->Display->text();
+    QString display2Val = ui->Display2->text();
+    displayVal.chop(1);
+    display2Val.chop(1);
+    ui->Display->setText(displayVal);
+    ui->Display2->setText(display2Val);
 }
 

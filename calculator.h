@@ -27,5 +27,7 @@ private slots:
     void on_Percent_released();
     void on_Square_released();
     void on_Clear_released();
+    void on_Back_released();
+    void on_Cube_released();
 };
 #endif // CALCULATOR_H
