@@ -29,5 +29,8 @@ private slots:
     void on_Clear_released();
     void on_Back_released();
     void on_Cube_released();
+    void on_Fraction_released();
+    void on_Hexadecimal_released();
+    void on_Binary_released();
 };
 #endif // CALCULATOR_H

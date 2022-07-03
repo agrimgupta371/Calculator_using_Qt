@@ -1,5 +1,9 @@
 #include "calculator.h"
 #include "ui_calculator.h"
+#include <cmath>
+#include <string>
+#include <bits/stdc++.h>
+using namespace std;
 //#include <QRegExp>
 
 double calcVal = 0.0;
@@ -164,6 +168,14 @@ void Calculator::on_Cube_released(){
     ui->Display->setText(QString::number(dblDisplayValSign, 'g', 16));
 }
 
+void Calculator::on_Fraction_released(){
+    QString displayVal = ui->Display->text();
+
+    double dblDisplayVal = displayVal.toDouble();
+    double dblDisplayValSign = 1/dblDisplayVal;
+    ui->Display->setText(QString::number(dblDisplayValSign, 'g', 16));
+}
+
 void Calculator::on_Clear_released(){
     divTrigger = false;
     multTrigger = false;
@@ -175,7 +187,6 @@ void Calculator::on_Clear_released(){
 }
 
 
-
 void Calculator::on_Back_released()
 {
     QString displayVal = ui->Display->text();
@@ -184,5 +195,81 @@ void Calculator::on_Back_released()
     display2Val.chop(1);
     ui->Display->setText(displayVal);
     ui->Display2->setText(display2Val);
+}
+
+
+void Calculator::on_Hexadecimal_released(){
+    QString displayVal = ui->Display->text();
+    double n = displayVal.toDouble();
+    int sign = 1;
+    string s;
+    if(n<0){
+        sign = -1;
+        n = n*sign;
+    }
+    double t = n - (int)n;
+    int x = (int)n;
+    while(x!=0){
+        int temp = x % 16;
+        if(temp<10){
+            s.push_back(temp + 48);
+        }
+        else{
+            s.push_back(temp + 55);
+        }
+        x = x/16;
+    }
+    if(sign == -1) s.push_back('-');
+    reverse(s.begin(), s.end());
+    if(t!=0) s.push_back('.');
+
+    while(t!=0){
+        double temp = t * 16;
+        int temp1 = (int)temp;
+        if(temp1<10){
+            s.push_back(temp1 + 48);
+        }
+        else{
+            s.push_back(temp1 + 55);
+        }
+        t = temp - temp1;
+    }
+    //return s;
+    QString s1 = QString::fromStdString(s);
+    ui->Display2->setText(s1);
+
+}
+
+
+void Calculator::on_Binary_released(){
+    QString displayVal = ui->Display->text();
+    double n = displayVal.toDouble();
+    int sign = 1;
+    string s;
+    if(n<0){
+        sign = -1;
+        n = n*sign;
+    }
+    double t = n - (int)n;
+    int x = (int)n;
+    while(x!=0){
+        int temp = x % 2;
+        s.push_back(temp + 48);
+        x = x/2;
+    }
+    if(sign == -1) s.push_back('-');
+    reverse(s.begin(), s.end());
+    if(t!=0) s.push_back('.');
+
+    while(t!=0){
+        double temp = t * 2;
+        int temp1 = (int)temp;
+        s.push_back(temp1 + 48);
+        t = temp - temp1;
+    }
+    //return s;
+    QString s1 = QString::fromStdString(s);
+    ui->Display2->setText(s1);
+
 }
 
